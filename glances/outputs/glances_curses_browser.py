@@ -325,6 +325,7 @@ class GlancesCursesBrowser(_GlancesCurses):
             ['mem_percent', 'MEM%', 5],
             ['status', 'STATUS', 9],
             ['uptime', 'UPTIME', 15],
+            ['users', 'USERS', 25],
             #['ip', 'IP', 15],
             # ['port', 'PORT', 5],
             #['hr_name', 'OS', 16],

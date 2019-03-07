@@ -145,6 +145,16 @@ class GlancesClientBrowser(object):
                     server['gpu'] = '{:.0f}'.format(gpu)
                     # Uptime
                     server['uptime'] = json.loads(s.getUptime())
+                    # Users
+                    process_list = json.loads(s.getProcessList())
+                    unique_users = set(map(lambda x: x['username'], process_list))
+
+                    # If any of these strings is found in a username we are not interested
+                    # in it. This seems to lower the update frequency, so it may not stay.
+                    USER_FILTER = ['Debian', '_', 'colord', 'messagebus', 'nagios',
+                    'nslcd', 'root', 'rtkit', 'system', 'www', 'lp']
+                    users = [user for user in unique_users if not any([f in user for f in USER_FILTER])]
+                    server['users'] = ' '.join(users)
                 except Exception as e:
                     logger.warning(
                         "Error while grabbing stats form {}: {}".format(uri, e))
