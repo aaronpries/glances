@@ -140,6 +140,11 @@ class GlancesClientBrowser(object):
                     # LOAD
                     load_min5 = json.loads(s.getLoad())['min5']
                     server['load_min5'] = '{:.2f}'.format(load_min5)
+                    # GPU
+                    gpu = json.loads(s.getGPU())[0]['mem']
+                    server['gpu'] = '{:.0f}'.format(gpu)
+                    # Uptime
+                    server['uptime'] = json.loads(s.getUptime())
                 except Exception as e:
                     logger.warning(
                         "Error while grabbing stats form {}: {}".format(uri, e))

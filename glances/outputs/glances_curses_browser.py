@@ -97,18 +97,18 @@ class GlancesCursesBrowser(_GlancesCurses):
         for item in stats:
             color = item['status']
             counts[color] = counts.get(color, 0) + 1
-    
+
         result = ''
         for key in counts.keys():
             result += key + ': ' + str(counts[key]) + ' '
-   
+
         return result
 
     def _get_stats(self, stats):
         stats_list = None
         if self._stats_list is not None:
             stats_list = self._stats_list
-            stats_list.sort(reverse = self._revesed_sorting, 
+            stats_list.sort(reverse = self._revesed_sorting,
                             key = lambda x: { 'UNKNOWN' : 0,
                                               'OFFLINE' : 1,
                                               'PROTECTED' : 2,
@@ -116,9 +116,9 @@ class GlancesCursesBrowser(_GlancesCurses):
                                               'ONLINE': 4 }.get(x['status'], 99))
         else:
             stats_list = stats
-        
+
         return stats_list
-        
+
     def cursor_up(self, stats):
         """Set the cursor to position N-1 in the list."""
         if 0 <= self.cursor_position - 1:
@@ -126,14 +126,14 @@ class GlancesCursesBrowser(_GlancesCurses):
         else:
             if self._current_page - 1 < 0 :
                 self._current_page = self._page_max - 1
-                self.cursor_position = (len(stats) - 1) % self._page_max_lines 
+                self.cursor_position = (len(stats) - 1) % self._page_max_lines
             else:
                 self._current_page -= 1
                 self.cursor_position = self._page_max_lines - 1
 
     def cursor_down(self, stats):
         """Set the cursor to position N-1 in the list."""
-        
+
         if self.cursor_position + 1 < self.get_pagelines(stats):
             self.cursor_position += 1
         else:
@@ -197,7 +197,7 @@ class GlancesCursesBrowser(_GlancesCurses):
             self._stats_list = None
             refresh = True
         elif self.pressedkey == ord('2'):
-            self._revesed_sorting = False            
+            self._revesed_sorting = False
             self._stats_list = stats.copy()
             refresh = True
         elif self.pressedkey == ord('3'):
@@ -301,13 +301,13 @@ class GlancesCursesBrowser(_GlancesCurses):
 
         if stats_len > stats_max and screen_y > 2:
             msg = '{} servers displayed.({}/{}) {}'.format(self.get_pagelines(stats),
-                                                            self._current_page + 1, 
-                                                            self._page_max, 
+                                                            self._current_page + 1,
+                                                            self._page_max,
                                                             self._get_status_count(stats))
             self.term_window.addnstr(y + 1, x,
                                      msg,
                                      screen_x - x)
-        
+
         if stats_len == 0:
             return False
 
@@ -321,11 +321,13 @@ class GlancesCursesBrowser(_GlancesCurses):
             ['alias', None, None],
             ['load_min5', 'LOAD', 6],
             ['cpu_percent', 'CPU%', 5],
+            ['gpu', 'GPU MEM%', 8],
             ['mem_percent', 'MEM%', 5],
             ['status', 'STATUS', 9],
-            ['ip', 'IP', 15],
+            ['uptime', 'UPTIME', 15],
+            #['ip', 'IP', 15],
             # ['port', 'PORT', 5],
-            ['hr_name', 'OS', 16],
+            #['hr_name', 'OS', 16],
         ]
         y = 2
 
@@ -347,10 +349,10 @@ class GlancesCursesBrowser(_GlancesCurses):
             self.cursor = len(stats) - 1
 
         stats_list = self._get_stats(stats)
-        start_line = self._page_max_lines * self._current_page 
+        start_line = self._page_max_lines * self._current_page
         end_line = start_line + self.get_pagelines(stats_list)
         current_page = stats_list[start_line:end_line]
-        
+
         # Display table
         line = 0
         for v in current_page:
